@@ -23,9 +23,7 @@ RSpec.describe 'the Bulk Discounts Index page' do
     @invoiceitem4 = InvoiceItem.create!(item: @item3, invoice: @invoice3, quantity: 1, unit_price: @item3.unit_price, status: 0 )
     @invoiceitem5 = InvoiceItem.create!(item: @item3, invoice: @invoice1, quantity: 1, unit_price: @item1.unit_price, status: 0 )
   end
-  # As a merchant
-  # When I visit my bulk discount show page
-  # Then I see the bulk discount's quantity threshold and percentage discount
+
   it 'displays the percentage/quantity threshold of the bulk discount' do
     visit merchant_bulk_discount_path(@merchant1, @discount1)
 
@@ -34,6 +32,48 @@ RSpec.describe 'the Bulk Discounts Index page' do
       expect(page).to have_content(@discount1.quantity_threshold)
       expect(page).to_not have_content(@discount2.percentage)
       expect(page).to_not have_content(@discount2.percentage)
+    end
+  end
+  # As a merchant
+  # When I visit my bulk discount show page
+  # Then I see a link to edit the bulk discount
+  # When I click this link
+  # Then I am taken to a new page with a form to edit the discount
+  # And I see that the discounts current attributes are pre-poluated in the form
+  # When I change any/all of the information and click submit
+  # Then I am redirected to the bulk discount's show page
+  # And I see that the discount's attributes have been updated
+  it 'has a link to edit the bulk discount' do
+    visit merchant_bulk_discount_path(@merchant1, @discount1)
+
+    within "#discount_info" do
+      expect(page).to have_link('Edit')
+    end
+  end
+
+  it 'can direct merchant to discount edit page with current attributes populated' do
+    visit merchant_bulk_discount_path(@merchant1, @discount1)
+    click_link('Edit')
+
+    expect(current_path).to eq(edit_merchant_bulk_discount_path(@merchant, @discount))
+    expect(page).to have_field('Percentage off Item Price')
+    expect(page).to have_field('Minimum Purchase Quantity')
+    expect(page).to have_content(@discount1.percentage)
+    expect(page).to have_content(@discount1.quantity_threshold)
+  end
+
+  it 'can update the bulk discount and redirect the discount show page' do
+    visit merchant_bulk_discount_path(@merchant1, @discount1)
+    click_link('Edit')
+
+    fill_in('Percentage off Item Price', with: 35)
+    fill_in('Minimum Purchase Quantity', with: 20)
+    click_button('Create Discount')
+
+    expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @discount1))
+    within "#discount_info" do
+      expect(@discount1.percentage).to match(35)
+      expect(@discount1.quantity_threshold).to match(20)
     end
   end
 end
