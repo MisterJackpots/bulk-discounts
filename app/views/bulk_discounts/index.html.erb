@@ -1,0 +1,23 @@
+<div class="d-flex justify-content-center">
+  <h2>My Discounts Offered</h2>
+</div>
+
+<p><%= link_to "Create a New Discount", new_merchant_bulk_discount_path %></p>
+
+<div class="container">
+  <div class="row align-items-start">
+    <div class="col">
+      <ul style="list-style-type:none;">
+        <% @merchant.bulk_discounts.each do |discount| %>
+          <div id="discount_info_<%= discount.id %>">
+            <li>
+              <%= discount.percentage %>% off <%= discount.quantity_threshold %> items or more - 
+              <%= link_to "More Info", merchant_bulk_discount_path(@merchant.id, discount.id) %>
+              <%= link_to "Delete", merchant_bulk_discount_path(@merchant.id, discount.id), method: :delete %>
+            </li>
+          </div>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>
