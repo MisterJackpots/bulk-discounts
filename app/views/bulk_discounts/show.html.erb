@@ -1,0 +1,21 @@
+<div class="d-flex justify-content-center">
+  <h2>My <%= @discount.percentage %>% off Discount</h2>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Amount off Regular Price</th>
+      <th>Minimum Purchase Quantity</th>
+      <th>Edit Discount?</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr id="discount_info">
+      <td><%= @discount.percentage %>%</td>
+      <td><%= @discount.quantity_threshold %></td>
+      <td><%= link_to "Edit", edit_merchant_bulk_discount_path(@merchant, @discount) %></td>
+    </tr>
+  </tbody> 
+</table>

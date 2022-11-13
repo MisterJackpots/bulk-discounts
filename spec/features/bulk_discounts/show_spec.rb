@@ -29,9 +29,11 @@ RSpec.describe 'the Bulk Discounts Index page' do
   it 'displays the percentage/quantity threshold of the bulk discount' do
     visit merchant_bulk_discount_path(@merchant1, @discount1)
 
-    expect(page).to have_content(@discount1.percentage)
-    expect(page).to have_content(@discount1.quantity_threshold)
-    expect(page).to_not have_content(@discount2.percentage)
-    expect(page).to_not have_content(@discount2.percentage)
+    within "#discount_info" do
+      expect(page).to have_content(@discount1.percentage)
+      expect(page).to have_content(@discount1.quantity_threshold)
+      expect(page).to_not have_content(@discount2.percentage)
+      expect(page).to_not have_content(@discount2.percentage)
+    end
   end
 end
