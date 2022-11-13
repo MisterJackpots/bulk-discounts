@@ -34,15 +34,7 @@ RSpec.describe 'the Bulk Discounts Index page' do
       expect(page).to_not have_content(@discount2.percentage)
     end
   end
-  # As a merchant
-  # When I visit my bulk discount show page
-  # Then I see a link to edit the bulk discount
-  # When I click this link
-  # Then I am taken to a new page with a form to edit the discount
-  # And I see that the discounts current attributes are pre-poluated in the form
-  # When I change any/all of the information and click submit
-  # Then I am redirected to the bulk discount's show page
-  # And I see that the discount's attributes have been updated
+
   it 'has a link to edit the bulk discount' do
     visit merchant_bulk_discount_path(@merchant1, @discount1)
 
@@ -55,11 +47,9 @@ RSpec.describe 'the Bulk Discounts Index page' do
     visit merchant_bulk_discount_path(@merchant1, @discount1)
     click_link('Edit')
 
-    expect(current_path).to eq(edit_merchant_bulk_discount_path(@merchant, @discount))
-    expect(page).to have_field('Percentage off Item Price')
-    expect(page).to have_field('Minimum Purchase Quantity')
-    expect(page).to have_content(@discount1.percentage)
-    expect(page).to have_content(@discount1.quantity_threshold)
+    expect(current_path).to eq(edit_merchant_bulk_discount_path(@merchant1, @discount1))
+    expect(page).to have_field('Percentage off Item Price', with: 20)
+    expect(page).to have_field('Minimum Purchase Quantity', with: 10)
   end
 
   it 'can update the bulk discount and redirect the discount show page' do
@@ -68,12 +58,12 @@ RSpec.describe 'the Bulk Discounts Index page' do
 
     fill_in('Percentage off Item Price', with: 35)
     fill_in('Minimum Purchase Quantity', with: 20)
-    click_button('Create Discount')
+    click_button('Edit Discount')
 
     expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @discount1))
     within "#discount_info" do
-      expect(@discount1.percentage).to match(35)
-      expect(@discount1.quantity_threshold).to match(20)
+      expect(page).to have_content("35%")
+      expect(page).to have_content("20")
     end
   end
 end
