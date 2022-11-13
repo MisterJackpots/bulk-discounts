@@ -1,14 +1,19 @@
 <div class="d-flex justify-content-center">
   <h2>My Discounts Offered</h2>
-  </div>
-    <ul style="list-style-type:none;", id="merchant-invoices">
-      <% @merchant.bulk_discounts.each do |discount| %>
-        <div id="discount_info_<%= discount.id %>">
-          <li>
-            <%= discount.percentage %>% off <%= discount.quantity_threshold %> items or more - <%= link_to "More Info", merchant_bulk_discount_path(@merchant.id, discount.id) %>
-          </li>
-        </div>
-      <% end %>
-    </ul>
+</div>
+
+<div class="container">
+  <div class="row align-items-start">
+    <div class="col">
+      <ul style="list-style-type:none;">
+        <% @merchant.bulk_discounts.each do |discount| %>
+          <div id="discount_info_<%= discount.id %>">
+            <li>
+              <%= discount.percentage %>% off <%= discount.quantity_threshold %> items or more - <%= link_to "More Info", merchant_bulk_discount_path(@merchant.id, discount.id) %>
+            </li>
+          </div>
+        <% end %>
+      </ul>
+    </div>
   </div>
 </div>
