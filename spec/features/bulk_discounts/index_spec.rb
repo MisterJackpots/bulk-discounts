@@ -77,16 +77,18 @@ RSpec.describe 'the Bulk Discounts Index page' do
     visit "/merchants/#{@merchant1.id}/bulk_discounts"
 
     click_link('Create a New Discount')
+
     fill_in('Percentage off Item Price', with: 35)
     fill_in('Minimum Purchase Quantity', with: 20)
     click_button('Create Discount')
+ 
     new_discount = BulkDiscount.last
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/bulk_discounts")
 
-    within "#discount_info_#{@discount1.id}" do
-      expect(page).to have_content("#{@discount1.percentage}% off")
-      expect(page).to have_content("#{@discount1.quantity_threshold} items or more")
+    within "#discount_info_#{new_discount.id}" do
+      expect(page).to have_content("#{new_discount.percentage}% off")
+      expect(page).to have_content("#{new_discount.quantity_threshold} items or more")
       expect(page).to have_link('More Info')
     end
   end
