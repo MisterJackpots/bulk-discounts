@@ -1,8 +1,6 @@
-<h1>Create a New Discount</h1>
-
 <div class="row">
   <div class="col">
-    <%= form_with model: [@merchant, @discount], local: true do |f| %>
+    <%= form_with model: model, local: true do |f| %>
     <div>
       <%= f.label :percentage, 'Percentage off Item Price' %>
       <%= f.text_field :percentage %>
@@ -12,7 +10,7 @@
       <%= f.text_field :quantity_threshold %>
     </div>
     <div>
-      <%= f.submit 'Create Discount' %>
+      <%= f.submit button_text %>
     </div>
     <% end %>
   </div>

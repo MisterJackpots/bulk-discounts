@@ -58,8 +58,9 @@ RSpec.describe 'the Bulk Discounts Index page' do
 
     fill_in('Percentage off Item Price', with: 35)
     fill_in('Minimum Purchase Quantity', with: 20)
+    
     click_button('Edit Discount')
-
+    
     expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @discount1))
     within "#discount_info" do
       expect(page).to have_content("35%")
