@@ -13,9 +13,11 @@
         <h1 class='bg-secondary bg-gradient text-center p-2'>Little Esty Shop</h1>
       </div>
     </div>
-<% flash.each do |type, message| %>
-  <p><%= message %></p>
-<% end %>
+      <% flash.each do |type, message| %>
+        <div>
+          <%= message %>
+        </div>
+      <% end %>
     <%= yield %>
   </body>
 </html>
