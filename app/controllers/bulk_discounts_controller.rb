@@ -18,7 +18,8 @@ class BulkDiscountsController < ApplicationController
     if @discount.save
       redirect_to merchant_bulk_discounts_path
     else
-      render 'new'
+      redirect_to new_merchant_bulk_discount_path(merchant)
+      flash[:alert] = "Invalid data, please try again"
     end
   end
 
@@ -33,7 +34,8 @@ class BulkDiscountsController < ApplicationController
     if discount.update(discount_params)
       redirect_to merchant_bulk_discount_path(merchant, discount)
     else
-      render 'edit'
+      redirect_to edit_merchant_bulk_discount_path(merchant, discount)
+      flash[:alert] = "Invalid data, please try again"
     end
   end
 

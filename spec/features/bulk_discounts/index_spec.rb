@@ -78,8 +78,8 @@ RSpec.describe 'the Bulk Discounts Index page' do
 
     click_link('Create a New Discount')
 
-    fill_in('Percentage off Item Price', with: 35)
-    fill_in('Minimum Purchase Quantity', with: 20)
+    fill_in('Percentage off Item Price:', with: 35)
+    fill_in('Minimum Purchase Quantity:', with: 20)
     click_button('Create Discount')
  
     new_discount = BulkDiscount.last
@@ -91,6 +91,19 @@ RSpec.describe 'the Bulk Discounts Index page' do
       expect(page).to have_content("#{new_discount.quantity_threshold} items or more")
       expect(page).to have_link('More Info')
     end
+  end
+
+  it 'will re-render the new form if given invalid info' do
+    visit merchant_bulk_discounts_path(@merchant1)
+
+    click_link('Create a New Discount')
+
+    fill_in('Percentage off Item Price:', with: "a")
+    fill_in('Minimum Purchase Quantity:', with: 20)
+    click_button('Create Discount')
+
+    expect(current_path).to eq(new_merchant_bulk_discount_path(@merchant1))
+    expect(page).to have_content("Invalid data, please try again")
   end
   
   it 'has a link next to each discount to delete the discount' do

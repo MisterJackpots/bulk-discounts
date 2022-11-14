@@ -48,22 +48,38 @@ RSpec.describe 'the Bulk Discounts Index page' do
     click_link('Edit')
 
     expect(current_path).to eq(edit_merchant_bulk_discount_path(@merchant1, @discount1))
-    expect(page).to have_field('Percentage off Item Price', with: 20)
-    expect(page).to have_field('Minimum Purchase Quantity', with: 10)
+    expect(page).to have_field('Percentage off Item Price:', with: 20)
+    expect(page).to have_field('Minimum Purchase Quantity:', with: 10)
   end
 
   it 'can update the bulk discount and redirect the discount show page' do
     visit merchant_bulk_discount_path(@merchant1, @discount1)
     click_link('Edit')
 
-    fill_in('Percentage off Item Price', with: 35)
-    fill_in('Minimum Purchase Quantity', with: 20)
+    fill_in('Percentage off Item Price:', with: 35)
+    fill_in('Minimum Purchase Quantity:', with: 20)
+    
     click_button('Edit Discount')
-
+    
     expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @discount1))
     within "#discount_info" do
       expect(page).to have_content("35%")
       expect(page).to have_content("20")
     end
+  end
+
+  it 'will re-render the edit form if given invalid info' do
+    visit merchant_bulk_discount_path(@merchant1, @discount1)
+    click_link('Edit')
+
+    fill_in('Percentage off Item Price:', with: "a")
+    fill_in('Minimum Purchase Quantity:', with: 20)
+    
+    click_button('Edit Discount')
+
+    expect(current_path).to eq(edit_merchant_bulk_discount_path(@merchant1, @discount1))
+    expect(page).to have_field('Percentage off Item Price:', with: 20)
+    expect(page).to have_field('Minimum Purchase Quantity:', with: 10)
+    expect(page).to have_content("Invalid data, please try again")
   end
 end
