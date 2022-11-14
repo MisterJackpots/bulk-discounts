@@ -3,11 +3,11 @@
     <%= form_with model: model, local: true do |f| %>
     <div>
       <%= f.label :percentage, 'Percentage off Item Price' %>
-      <%= f.text_field :percentage %>
+      <%= f.number_field :percentage %>
     </div>
     <div>
       <%= f.label :quantity_threshold, 'Minimum Purchase Quantity' %>
-      <%= f.text_field :quantity_threshold %>
+      <%= f.number_field :quantity_threshold %>
     </div>
     <div>
       <%= f.submit button_text %>
