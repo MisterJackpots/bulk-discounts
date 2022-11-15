@@ -8,7 +8,8 @@
 <p>Status: <%= @invoice.status %></p>
 
 <p>Created on: <%= @invoice.formatted_date %></p>
-<p>Total Revenue: <%= number_to_currency(@merchant.invoice_revenue(@invoice.id) / 100.00) %>
+<p>Total Revenue: <%= number_to_currency(@merchant.invoice_revenue(@invoice.id) / 100.00) %></p>
+<p>Discounted Revenue: <%= number_to_currency(@merchant.discounted_revenue(@invoice.id) / 100.00) %>
 <h3>Customer:</h3>
 <p><%= @invoice.customer.first_name %> <%= @invoice.customer.last_name %></p>
 
