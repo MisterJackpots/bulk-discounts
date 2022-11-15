@@ -70,6 +70,13 @@ RSpec.describe InvoiceItem, type: :model do
         expect(@invoiceitem2.discounted_price_total).to eq(2450)
       end
     end
-  end
 
+    describe '#invoice_item_total' do
+      it 'can return the invoice item total considering any discounts' do
+        expect(@invoiceitem1.invoice_item_total).to eq(2054)
+        expect(@invoiceitem2.invoice_item_total).to eq(2450)
+        expect(@invoiceitem4.invoice_item_total).to eq(2100)
+      end
+    end
+  end
 end

@@ -28,4 +28,12 @@ class InvoiceItem < ApplicationRecord
     (retail_price_total - (retail_price_total * biggest_discount_percentage / 100.00)).round(0)
   end
 
+  def invoice_item_total
+    if biggest_discount.blank?
+      retail_price_total
+    else
+      discounted_price_total
+    end
+  end
+
 end
