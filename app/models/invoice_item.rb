@@ -19,4 +19,13 @@ class InvoiceItem < ApplicationRecord
   def retail_price_total
     quantity * unit_price
   end
+
+  def biggest_discount_percentage
+    biggest_discount.percentage
+  end
+
+  def discounted_price_total
+    (retail_price_total - (retail_price_total * biggest_discount_percentage / 100.00)).round(0)
+  end
+
 end

@@ -19,8 +19,8 @@ RSpec.describe InvoiceItem, type: :model do
     @discount1 = BulkDiscount.create!(percentage: 20, quantity_threshold: 2, merchant_id: @merchant1.id)
     @discount2 = BulkDiscount.create!(percentage: 15, quantity_threshold: 1, merchant_id: @merchant1.id)
     @discount3 = BulkDiscount.create!(percentage: 30, quantity_threshold: 3, merchant_id: @merchant1.id)
-    @item1 = @merchant1.items.create!(name: "Learn to Count, Dummy!", description: "Educational Children's Book", unit_price: 2400)
-    @item2 = @merchant1.items.create!(name: "Go to Sleep Please, Mommy Just Wants to Watch Leno", description: "Baby Book", unit_price: 1500)
+    @item1 = @merchant1.items.create!(name: "Learn to Count, Dummy!", description: "Educational Children's Book", unit_price: 2417)
+    @item2 = @merchant1.items.create!(name: "Go to Sleep Please, Mommy Just Wants to Watch Leno", description: "Baby Book", unit_price: 1531)
     @item3 = @merchant2.items.create!(name: "There ARE More Than Seven Animals But This is a Good Start", description: "Educational Children's Book", unit_price: 2100)
     @mary = Customer.create!(first_name: "Mary", last_name: "Mommy")
     @daniel = Customer.create!(first_name: "Daniel", last_name: "Daddy")
@@ -52,11 +52,24 @@ RSpec.describe InvoiceItem, type: :model do
 
     describe '#retail_price_total' do
       it 'can return the non-discounted invoice item total' do
-        expect(@invoiceitem1.retail_price_total).to eq(2400)
-        expect(@invoiceitem2.retail_price_total).to eq(3000)
+        expect(@invoiceitem1.retail_price_total).to eq(2417)
+        expect(@invoiceitem2.retail_price_total).to eq(3062)
       end
     end
 
+    describe '#biggest_discount_percentage' do
+      it 'can return the percentage from the biggest available discount' do
+        expect(@invoiceitem1.biggest_discount_percentage).to eq(@discount2.percentage)
+        expect(@invoiceitem2.biggest_discount_percentage).to eq(@discount1.percentage)
+      end
+    end
+
+    describe '#discounted_price_total' do
+      it 'can return the discounted invoice item total' do
+        expect(@invoiceitem1.discounted_price_total).to eq(2054)
+        expect(@invoiceitem2.discounted_price_total).to eq(2450)
+      end
+    end
   end
 
 end
