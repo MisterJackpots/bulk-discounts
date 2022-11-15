@@ -38,14 +38,14 @@ RSpec.describe 'the merchant invoices show page' do
     within "#invoice_item_#{@invoiceitem1.id}" do
       expect(page).to have_content(@item1.name)
       expect(page).to have_content(@invoiceitem1.quantity)
-      expect(page).to have_content("Unit Price: $24.00")
+      expect(page).to have_content("$24.00")
       expect(page).to have_content(@invoiceitem1.status)
     end
 
     within "#invoice_item_#{@invoiceitem2.id}" do
       expect(page).to have_content(@item2.name)
       expect(page).to have_content(@invoiceitem2.quantity)
-      expect(page).to have_content("Unit Price: $15.50")
+      expect(page).to have_content("15.50")
       expect(page).to have_content(@invoiceitem2.status)
     end
   end
@@ -88,5 +88,27 @@ RSpec.describe 'the merchant invoices show page' do
     visit merchant_invoice_path(@merchant1, @invoice1)
     
     expect(page).to have_content("Discounted Revenue: $48.80")
+  end
+
+  it 'has a link to the bulk discount show page next to an invoice item, if applicable' do
+    visit merchant_invoice_path(@merchant1, @invoice1)
+
+    within "#invoice_item_#{@invoiceitem1.id}" do
+      expect(page).to_not have_link('Discount Applied')
+    end
+    
+    within "#invoice_item_#{@invoiceitem2.id}" do
+      expect(page).to have_link('Discount Applied')
+      click_link('Discount Applied')
+      expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @discount1))
+    end
+  end
+
+  it 'displays the total for an invoice item based on unit price, quantity, and discount' do
+    visit merchant_invoice_path(@merchant1, @invoice1)
+    save_and_open_page
+    within "#invoice_item_#{@invoiceitem2.id}" do
+      expect(page).to have_content("$24.80")
+    end
   end
 end

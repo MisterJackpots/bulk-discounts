@@ -20,6 +20,8 @@
         <th>Item Name</th>
         <th>Quantity</th>
         <th>Unit Price</th>
+        <th>Discount (if applicable)</th>
+        <th>Total</th>
         <th>Status</th>
       </tr>
     </thead>
@@ -27,11 +29,17 @@
       <tbody>
         <% @merchant.items_for_this_invoice(@invoice.id).each do |invoice_item| %>
           <tr id="invoice_item_<%= invoice_item.id %>">
-            <td>Name: <%= invoice_item.item.name %></td>
-            <td>Quantity: <%= invoice_item.quantity %></td>
-            <td>Unit Price: <%= number_to_currency(invoice_item.unit_price / 100.00) %></td>
+            <td><%= invoice_item.item.name %></td>
+            <td><%= invoice_item.quantity %></td>
+            <td><%= number_to_currency(invoice_item.unit_price / 100.00) %></td>
+            <td>
+              <% if invoice_item.biggest_discount.present? %>
+                <%= link_to 'Discount Applied', merchant_bulk_discount_path(@merchant, invoice_item.biggest_discount) %>
+              <% else %>
+                N/A
+              <% end %>
+            <td><%= number_to_currency(invoice_item.invoice_item_total / 100.00) %>
             <td><%= form_with model: [@merchant, invoice_item], method: :patch, local: true do |form| %>
-                  <%= form.label :status, 'Status:' %>
                   <%= form.select :status, ['pending', 'packaged', 'shipped'] %>
                   <%= form.submit 'Update Item Status' %>
                 <% end %>
