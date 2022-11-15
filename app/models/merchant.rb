@@ -25,6 +25,13 @@ class Merchant < ApplicationRecord
     items_for_this_invoice(invoice_id).sum('invoice_items.unit_price * invoice_items.quantity')
   end
 
+  def discounted_revenue(invoice_id)
+    revenue = items_for_this_invoice(invoice_id).map do |item|
+      item.invoice_item_total
+    end
+    revenue.sum
+  end
+
   def invoices_not_shipped
     invoice_items.select('invoice_items.*')
     .where(status: [0, 1])
