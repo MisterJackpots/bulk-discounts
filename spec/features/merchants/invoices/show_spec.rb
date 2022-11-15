@@ -5,7 +5,7 @@ RSpec.describe 'the merchant invoices show page' do
     @merchant1 = Merchant.create!(name: "Billy's Baby Book Barn")
     @merchant2 = Merchant.create!(name: "Candy's Child Compendium Collection")
     @discount1 = BulkDiscount.create!(percentage: 20, quantity_threshold: 2, merchant_id: @merchant1.id)
-    @discount2 = BulkDiscount.create!(percentage: 15, quantity_threshold: 1, merchant_id: @merchant1.id)
+    @discount2 = BulkDiscount.create!(percentage: 15, quantity_threshold: 2, merchant_id: @merchant1.id)
     @discount3 = BulkDiscount.create!(percentage: 30, quantity_threshold: 3, merchant_id: @merchant1.id)
     @item1 = @merchant1.items.create!(name: "Learn to Count, Dummy!", description: "Educational Children's Book", unit_price: 2400)
     @item2 = @merchant1.items.create!(name: "Go to Sleep Please, Mommy Just Wants to Watch Leno", description: "Baby Book", unit_price: 1550)
@@ -87,6 +87,6 @@ RSpec.describe 'the merchant invoices show page' do
   it 'displays the total revenue for items sold on this invoice' do
     visit merchant_invoice_path(@merchant1, @invoice1)
     
-    expect(page).to have_content("Discounted Revenue: $45.20")
+    expect(page).to have_content("Discounted Revenue: $48.80")
   end
 end
