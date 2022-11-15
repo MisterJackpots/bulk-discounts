@@ -4,6 +4,9 @@ RSpec.describe 'the merchant invoices show page' do
   before :each do
     @merchant1 = Merchant.create!(name: "Billy's Baby Book Barn")
     @merchant2 = Merchant.create!(name: "Candy's Child Compendium Collection")
+    @discount1 = BulkDiscount.create!(percentage: 20, quantity_threshold: 2, merchant_id: @merchant1.id)
+    @discount2 = BulkDiscount.create!(percentage: 15, quantity_threshold: 2, merchant_id: @merchant1.id)
+    @discount3 = BulkDiscount.create!(percentage: 30, quantity_threshold: 3, merchant_id: @merchant1.id)
     @item1 = @merchant1.items.create!(name: "Learn to Count, Dummy!", description: "Educational Children's Book", unit_price: 2400)
     @item2 = @merchant1.items.create!(name: "Go to Sleep Please, Mommy Just Wants to Watch Leno", description: "Baby Book", unit_price: 1550)
     @item3 = @merchant2.items.create!(name: "There ARE More Than Seven Animals But This is a Good Start", description: "Educational Children's Book", unit_price: 2100)
@@ -18,7 +21,6 @@ RSpec.describe 'the merchant invoices show page' do
     @invoiceitem3 = InvoiceItem.create!(item: @item1, invoice: @invoice2, quantity: 1, unit_price: @item1.unit_price, status: 0 )
     @invoiceitem4 = InvoiceItem.create!(item: @item3, invoice: @invoice3, quantity: 1, unit_price: @item3.unit_price, status: 0 )
     @invoiceitem5 = InvoiceItem.create!(item: @item3, invoice: @invoice1, quantity: 1, unit_price: @item1.unit_price, status: 0 )
-
   end
 
   it 'displays the id/status/date/customer name related to the invoice' do
@@ -48,7 +50,7 @@ RSpec.describe 'the merchant invoices show page' do
     end
   end
 
-  it 'display the total revenue for items sold on this invoice' do
+  it 'displays the total revenue for items sold on this invoice' do
     visit "/merchants/#{@merchant1.id}/invoices/#{@invoice1.id}"
 
     expect(page).to have_content("Total Revenue: $55.00")
@@ -80,5 +82,11 @@ RSpec.describe 'the merchant invoices show page' do
       expect(current_path).to eq("/merchants/#{@merchant1.id}/invoices/#{@invoice1.id}")
       expect(page).to have_content(@invoiceitem1.status)
     end
+  end
+
+  it 'displays the total revenue for items sold on this invoice' do
+    visit merchant_invoice_path(@merchant1, @invoice1)
+    
+    expect(page).to have_content("Discounted Revenue: $47.80")
   end
 end
