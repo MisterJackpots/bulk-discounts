@@ -18,6 +18,9 @@ RSpec.describe Merchant do
   before :each do
     @merchant1 = Merchant.create!(name: "Billy's Baby Book Barn")
     @merchant2 = Merchant.create!(name: "Candy's Child Compendium Collection")
+    @discount1 = BulkDiscount.create!(percentage: 20, quantity_threshold: 2, merchant_id: @merchant1.id)
+    @discount2 = BulkDiscount.create!(percentage: 15, quantity_threshold: 1, merchant_id: @merchant1.id)
+    @discount3 = BulkDiscount.create!(percentage: 30, quantity_threshold: 3, merchant_id: @merchant1.id)
     @item1 = @merchant1.items.create!(name: 'Learn to Count, Dummy!', description: "Educational Children's Book",
                                       unit_price: 2400)
     @item2 = @merchant1.items.create!(name: 'Go to Sleep Please, Mommy Just Wants to Watch Leno',
@@ -61,6 +64,12 @@ RSpec.describe Merchant do
     describe '#invoice_revenue' do
       it 'returns the total revenue for items sold on this invoice' do
         expect(@merchant1.invoice_revenue(@invoice1.id)).to eq(5400)
+      end
+    end
+
+    describe '#discounted_revenue' do
+      it 'returns the discounted revenue for items sold on this invoice' do
+        expect(@merchant1.discounted_revenue(@invoice1.id)).to eq(4440)
       end
     end
 
