@@ -106,7 +106,7 @@ RSpec.describe 'the merchant invoices show page' do
 
   it 'displays the total for an invoice item based on unit price, quantity, and discount' do
     visit merchant_invoice_path(@merchant1, @invoice1)
-    save_and_open_page
+
     within "#invoice_item_#{@invoiceitem2.id}" do
       expect(page).to have_content("$24.80")
     end
