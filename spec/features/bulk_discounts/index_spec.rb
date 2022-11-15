@@ -128,4 +128,10 @@ RSpec.describe 'the Bulk Discounts Index page' do
     expect(page).to_not have_content(@discount2.percentage)
     expect(page).to_not have_content(@discount2.quantity_threshold)
   end
+
+  it 'can have a section displaying the next three holidays' do
+    visit merchant_bulk_discounts_path(@merchant1)
+
+    expect(page).to have_content("Upcoming Holidays")
+  end
 end
