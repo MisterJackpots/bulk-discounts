@@ -7,6 +7,8 @@ RSpec.describe "Admin Invoices Show Page", type: :feature do
     @merchant_2 = Merchant.create!(name: "Amazon", status: 1)
     @merchant_3 = Merchant.create!(name: "Fred Meyer", status: 0)
 
+    @discount1 = BulkDiscount.create!(percentage: 20, quantity_threshold: 600, merchant_id: @merchant_1.id)
+
     @customer_1 = Customer.create!(first_name: "Luke", last_name: "Harison")
     @customer_2 = Customer.create!(first_name: "Angela", last_name: "Leizer")
     @customer_3 = Customer.create!(first_name: "Matt", last_name: "Sorry")
@@ -86,8 +88,14 @@ RSpec.describe "Admin Invoices Show Page", type: :feature do
 
   it "should list the total revenue that will be generated from the specified invoice" do
     visit "admin/invoices/#{@invoice_1.id}"
-    expect(page).to have_content("Total Revenue: $4,311.00")
+    expect(page).to have_content("Total Revenue: $31,697.08")
     expect(page).to have_no_content("Total Revenue: $10,000,045.00")
+  end
+
+  it 'displays the total discounted revenue from this invoice' do
+    visit admin_invoice_path(@invoice_1)
+
+    expect(page).to have_content("Discounted Revenue: $25,363.56")
   end
 
   it "should have all of the items on the invoice including the item name, quantity of item
@@ -99,7 +107,7 @@ RSpec.describe "Admin Invoices Show Page", type: :feature do
       within("#invoice-#{@invoice_item_1.item.id}") do
         expect(page).to have_content(@invoice_item_1.item.name)
         expect(page).to have_content(@invoice_item_1.quantity)
-        expect(page).to have_content("$4,291.00")
+        expect(page).to have_content("$42.91")
         expect(page).to have_content(@invoice_item_1.status)
       end
 
